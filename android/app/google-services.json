@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488862051703",
+    "project_id": "gradeplus-eec18",
+    "storage_bucket": "gradeplus-eec18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488862051703:android:87963039b94eeea76f0572",
+        "android_client_info": {
+          "package_name": "com.example.gradeplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrfBkI4-cs-fFvIu5zcXR2YgizsVmTFMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
