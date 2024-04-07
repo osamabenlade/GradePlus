@@ -15,17 +15,19 @@ import 'components/custom_dropdown.dart';
 List<Color> _colors = [kPrimaryColor, kPrimaryLightColor];
 List<double> _stops = [0.0, 1.8];
 
+
+
 String college = "IIITA";
 int batch=2022;
 String branch='IT';
 int semester=4;
 
-class UserDetailGetter extends StatefulWidget {
+class LoginDetailScreen extends StatefulWidget {
   @override
-  _UserDetailGetterState createState() => _UserDetailGetterState();
+  _LoginDetailScreenGetterState createState() => _LoginDetailScreenGetterState();
 }
 
-class _UserDetailGetterState extends State<UserDetailGetter> {
+class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
   List<String> _branches = ['IT', 'ITBI', 'ECE'];
 
   List<int> _semester = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -76,21 +78,12 @@ class _UserDetailGetterState extends State<UserDetailGetter> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: DropdownButton<int>(
-                      value: _selectedSemester,
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _selectedSemester = newValue;
-                        });
-                      },
-                      items: _semester.map<DropdownMenuItem<int>>((int semester) {
-                        return DropdownMenuItem<int>(
-                          value: semester,
-                          child: Text(semester.toString(),style: TextStyle(color: Colors.blue),),
-                        );
-                      }).toList(),
-                      hint: Text('Select a semester'), // Add a hint text
+                    child: CustomDropdown(
+                      text: "Select semester",
+                      list: _semester,
+                      type: 1,
                     ),
+
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -105,21 +98,12 @@ class _UserDetailGetterState extends State<UserDetailGetter> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: DropdownButton<int>(
-                      value: _selectedBatch,
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _selectedBatch = newValue;
-                        });
-                      },
-                      items: _batches.map<DropdownMenuItem<int>>((int batch) {
-                        return DropdownMenuItem<int>(
-                          value: batch,
-                          child: Text(batch.toString()),
-                        );
-                      }).toList(),
-                      hint: Text('Select a batch'), // Add a hint text
+                    child: CustomDropdown(
+                      text: "Select Batch",
+                      list: _batches,
+                      type: 2,
                     ),
+
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -135,20 +119,10 @@ class _UserDetailGetterState extends State<UserDetailGetter> {
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: DropdownButton<String>(
-                      value: _selectedBranch,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedBranch = newValue;
-                        });
-                      },
-                      items: _branches.map<DropdownMenuItem<String>>((String branch) {
-                        return DropdownMenuItem<String>(
-                          value: branch,
-                          child: Text(branch),
-                        );
-                      }).toList(),
-                      hint: Text('Select a branch'), // Add a hint text
+                    child: CustomDropdown(
+                      text: "Select Branch",
+                      list: _branches,
+                      type: 3,
                     ),
                   ),
 
