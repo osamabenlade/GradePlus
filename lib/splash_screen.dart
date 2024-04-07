@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: ClipOval(
                 child: Center(
                   child: Image.asset(
-                    'assets/images/logo.png',
+                    'assets/images/tmplogo.png',
                     height: 220,
                     width: 220,),
                 ),

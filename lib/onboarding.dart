@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradeplus/screens/login/login_screen.dart';
 
-import 'package:lottie/lottie.dart';
+
 
 
 
@@ -132,7 +132,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
           if (_currentIndex == 2) {
             Navigator.push(context,
                 // MaterialPageRoute(builder: (context) => HomeScreen()));
-                MaterialPageRoute(builder: (context) => LoginScreen()));
+                MaterialPageRoute(builder: (context) => const LoginScreen()));
           } else {
             _pageController.nextPage(
               duration: const Duration(milliseconds: 300),
@@ -213,14 +213,14 @@ class OnboardingModel {
 List<OnboardingModel> tabs = [
   OnboardingModel(
     'assets/test.png',
-    'Little by little , a llitle becomes a lot !'
+    'page 1.................'
   ),
   OnboardingModel(
     'assets/test.png',
-    'If you cannot feed hundred people , then just feed one!'
+    'page 2..............................'
   ),
   OnboardingModel(
     'assets/test.png',
-    'write later'
+    'write later...........................'
   ),
 ];

@@ -111,7 +111,7 @@ class _LoginFormState extends State<LoginForm> {
               onTap: () async {
               await FirebaseServices().signInWithGoogle();
               Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UserDetailGetter()));
+              MaterialPageRoute(builder: (context) => LoginDetailScreen()));
               },
                 /*onTap: () {
                   FirebaseAuth.instance
