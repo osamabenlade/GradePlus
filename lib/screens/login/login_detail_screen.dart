@@ -131,7 +131,7 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()));
+                            MaterialPageRoute(builder: (context) => SubjectListScreen()));
                         /*Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {

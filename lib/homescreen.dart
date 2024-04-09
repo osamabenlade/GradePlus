@@ -1,66 +1,80 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gradeplus/screens/login/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
 
 
-import 'firebase_services.dart';
-
-/*class HomeScreen extends StatelessWidget {
+class SubjectListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Center(
-        child: Text(
-          'Hello, World!',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Text(
+          'Subject List',
+          style: TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.blue[700],
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('Semester4').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView.separated(
+            itemCount: snapshot.data!.docs.length,
+            separatorBuilder: (BuildContext context, int index) => Divider(),
+            itemBuilder: (BuildContext context, int index) {
+              DocumentSnapshot document = snapshot.data!.docs[index];
+              Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+              if (data == null) {
+                return SizedBox();
+              }
+
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: Image.network(
+                    data['iconUrl'],
+                    height: 60,
+                    width: 80,
+                  ),
+                  title: Text(data['subjectCode'], style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),),
+                  subtitle: Text(data['subjectName']),
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SubjectScreen(data)),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
-}*/
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Text("${FirebaseAuth.instance.currentUser!.displayName}"),
-            Text("${FirebaseAuth.instance.currentUser!.email}"),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              child: Text("Logout"),
-              onPressed: () async {
-                await FirebaseServices().googleSignOut();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginScreen()));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
+void main() {
+  runApp(MaterialApp(
+    home: SubjectListScreen(),
+  ));
 }
+

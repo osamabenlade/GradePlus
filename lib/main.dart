@@ -6,6 +6,7 @@ import 'package:gradeplus/screens/login/login_screen.dart';
 import 'package:gradeplus/splash_screen.dart';
 
 import 'firebase_options.dart';
+import 'homescreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: SubjectListScreen(),
     );
   }
 }
