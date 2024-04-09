@@ -4,6 +4,16 @@ import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
 
 
 class SubjectListScreen extends StatelessWidget {
+  final int semester;
+  final int batch;
+  final String branch;
+
+  SubjectListScreen({
+    required this.semester,
+    required this.batch,
+    required this.branch,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +25,7 @@ class SubjectListScreen extends StatelessWidget {
         backgroundColor: Colors.blue[700],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Semester4').snapshots(),
+        stream: FirebaseFirestore.instance.collection(getSemesterName(semester)).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -70,11 +80,7 @@ class SubjectListScreen extends StatelessWidget {
     );
   }
 }
-
-
-void main() {
-  runApp(MaterialApp(
-    home: SubjectListScreen(),
-  ));
+String getSemesterName(int semesterNumber) {
+  return 'Semester$semesterNumber';
 }
 
