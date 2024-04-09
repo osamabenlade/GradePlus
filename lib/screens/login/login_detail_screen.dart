@@ -123,15 +123,24 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
                       text: "Select Branch",
                       list: _branches,
                       type: 3,
+
                     ),
                   ),
 
                   Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SubjectListScreen()));
+                        onTap: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                        builder: (context) => SubjectListScreen(
+                        semester: semester,
+                        batch: batch,
+                        branch: branch,
+                        ),
+                        ),
+                        );
                         /*Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
