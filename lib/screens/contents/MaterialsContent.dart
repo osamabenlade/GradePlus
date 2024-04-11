@@ -131,8 +131,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-
 import '../components/pdfViewer.dart';
 
 class MaterialsContent extends StatelessWidget {
