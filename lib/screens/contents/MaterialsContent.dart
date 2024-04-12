@@ -191,7 +191,7 @@ class MaterialsContent extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PdfViewer(data['link']),
+                              builder: (context) => PdfViewer(data['link'], data['itemName']),
                             ),
                           );
                         },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradeplus/screens/components/ChatScreen.dart';
 import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
 
 
@@ -23,6 +24,20 @@ class SubjectListScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue[700],
+        actions: <Widget>[ // Add actions to the app bar
+          IconButton(
+            icon: Icon(Icons.chat), // Add chat icon
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection(getSemesterName(semester)).snapshots(),
