@@ -109,9 +109,9 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 30),
               GestureDetector(
               onTap: () async {
-              await FirebaseServices().signInWithGoogle();
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LoginDetailScreen()));
+              await FirebaseServices().signInWithGoogle(context);
+              // Navigator.push(context,
+              // MaterialPageRoute(builder: (context) => LoginDetailScreen()));
               },
                 /*onTap: () {
                   FirebaseAuth.instance
