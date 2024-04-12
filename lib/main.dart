@@ -2,7 +2,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gradeplus/screens/login/login_detail_screen.dart';
 import 'package:gradeplus/screens/login/login_screen.dart';
+import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
 import 'package:gradeplus/splash_screen.dart';
 
 import 'firebase_options.dart';

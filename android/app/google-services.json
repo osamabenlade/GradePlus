@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "488862051703",
+    "firebase_url": "https://gradeplus-eec18-default-rtdb.firebaseio.com",
     "project_id": "gradeplus-eec18",
     "storage_bucket": "gradeplus-eec18.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "488862051703-3mc6krmdnc42klfbkv6vkk15k01f2qgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gradeplus",
+            "certificate_hash": "344e1ccae32e4a04b79b80122b776adce066bff6"
+          }
+        },
+        {
+          "client_id": "488862051703-vlk1u0mne2uv3cndookssthlhl48f74u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gradeplus",
+            "certificate_hash": "67d5287fdcfea1b8310ec2c5de2866fc4dff42fb"
+          }
+        },
         {
           "client_id": "488862051703-m0p60c6mtdhqouif6pbk32otokjlldg2.apps.googleusercontent.com",
           "client_type": 3

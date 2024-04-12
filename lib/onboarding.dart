@@ -11,8 +11,6 @@ import 'package:gradeplus/screens/login/login_screen.dart';
 
 
 
-
-
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
 
