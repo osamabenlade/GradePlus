@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gradeplus/screens/components/ChatScreen.dart';
+import 'package:gradeplus/screens/login/login_screen.dart';
 import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
+
+import 'firebase_services.dart';
 
 
 class SubjectListScreen extends StatelessWidget {
@@ -34,6 +37,20 @@ class SubjectListScreen extends StatelessWidget {
                   builder: (context) => ChatScreen(),
                 ),
               );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              FirebaseServices().googleSignOut();
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+              // Go back to the previous screen after signing out
             },
           ),
         ],
