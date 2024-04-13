@@ -52,13 +52,15 @@ class _AddModeratorScreenState extends State<AddModeratorScreen> {
                 String email = _emailController.text;
                 String name = _nameController.text;
                 String uid = _uidController.text;
+                List<String>? parts = email?.split('@');
+                String? emailWithoutDomain = parts?.first;
 
                 // Validate input if needed
-                DatabaseReference moderatorRef = FirebaseDatabase.instance.reference().child("moderators").child(uid);
+                DatabaseReference moderatorRef = FirebaseDatabase.instance.reference().child("moderators").child(emailWithoutDomain!);
 
                 await moderatorRef.set({
                   "name": name,
-                  "email": email,
+                  "id": uid,
                 });
                 // Add your logic to save the moderator details here
 

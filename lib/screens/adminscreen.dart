@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gradeplus/screens/ShowModeratorsScreen.dart';
 import 'package:gradeplus/screens/addModerator.dart';
 
 import '../firebase_services.dart';
@@ -53,6 +54,24 @@ class AdminScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => AddModeratorScreen()));
                 },
               ),
+
+            ),
+            SizedBox(height: 20),
+            Card(
+              elevation: 4, // Add elevation for a shadow effect
+              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8), // Add margin for spacing between tiles
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Add rounded corners to the tile
+              ),
+              child: ListTile(
+                title: Text('Show moderators'), // Replace 'Your Tile Text' with the text you want to display
+                onTap: () {
+                  // Add any action you want to perform when the tile is tapped
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ShowModerators()));
+                },
+              ),
+
             ),
           ],
         ),

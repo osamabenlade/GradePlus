@@ -9,6 +9,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradeplus/screens/adminscreen.dart';
+import 'package:gradeplus/screens/login/ModeratorScreen.dart';
 import 'package:gradeplus/screens/login/login_detail_screen.dart';
 
 class FirebaseServices {
@@ -39,15 +40,71 @@ class FirebaseServices {
         // Use the email and name as needed
         print('Email: $email');
         print('Name: $name');
+        List<String>? parts = email?.split('@');
+        String? emailWithoutDomain = parts?.first;
+        print('Email: $emailWithoutDomain');
 
 
         final ref = FirebaseDatabase.instance.ref();
-        final snapshot = await ref.child('admins/mail2').get();
+        final snapshot = await ref.child('admins').get();
+
         if (snapshot.exists) {
-          if(snapshot.value==email)
+          // Get the data snapshot value as a Map<String, dynamic>
+          Map<dynamic, dynamic>? userData = snapshot.value as Map<
+              dynamic,
+              dynamic>?;
+
+          if (userData != null) {
+            // Convert the data to Map<String, dynamic> by casting each entry
+            Map<String, dynamic> stringData = userData.map((key, value) =>
+                MapEntry(key.toString(), value));
+
+            // Check if the entered UID matches any keys under the "users" section
+            bool uidExists = stringData.containsKey(emailWithoutDomain);
+
+            if (uidExists) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>
+                      AdminScreen(name: name!, email: emailWithoutDomain!)));
+              print('UID exists in the database');
+            } else {
+              final snapshot = await ref.child('moderators').get();
+              if (snapshot.exists) {
+                Map<dynamic, dynamic>? userData = snapshot.value as Map<
+                    dynamic,
+                    dynamic>?;
+                if (userData != null) {
+                  Map<String, dynamic> stringData = userData.map((key, value) =>
+                      MapEntry(key.toString(), value));
+                  bool uidExists = stringData.containsKey(emailWithoutDomain);
+                  if (uidExists) {
+                    //moderators
+                    String mod_name = userData[emailWithoutDomain]['name'];
+                    String mod_uid = userData[emailWithoutDomain]['id'];
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) =>
+                            ModeratorScreen(
+                                name: mod_name, uid: mod_uid, email: email!)));
+                  }
+                  else {
+                    //noraml user
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginDetailScreen()));
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        /*if (snapshot.exists) {
+          String tmp=snapshot.value.toString();
+          print('check : $tmp');
+          if(snapshot.value==emailWithoutDomain)
             {
               Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminScreen(name: name!, email: email!)));
+              MaterialPageRoute(builder: (context) => AdminScreen(name: name!, email: emailWithoutDomain!)));
             }
           else
             {
@@ -58,7 +115,7 @@ class FirebaseServices {
 
         } else {
           print('No data available.');
-        }
+        }*/
 
 
 // Compare the signed-in user's email with the admin email
