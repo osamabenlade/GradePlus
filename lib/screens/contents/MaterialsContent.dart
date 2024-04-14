@@ -135,14 +135,15 @@ import '../components/pdfViewer.dart';
 
 class MaterialsContent extends StatelessWidget {
   final String subjectData;
+  final String type;
 
-  MaterialsContent(this.subjectData);
+  MaterialsContent(this.subjectData,this.type);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection(subjectData).snapshots(),
+        stream: FirebaseFirestore.instance.collection('Subjects').doc(subjectData).collection(type).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(
