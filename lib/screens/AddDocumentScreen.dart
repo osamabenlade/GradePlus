@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class AddDocumentScreen extends StatefulWidget {
+  final String fileType;
+
+  const AddDocumentScreen({required this.fileType});
   @override
   _AddDocumentScreenState createState() => _AddDocumentScreenState();
 }
@@ -34,9 +37,10 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     if (selectedFile == null) return;
 
     try {
+      String docType = widget.fileType;
       String fileName = selectedFile!.path.split('/').last; // Extracts the file name from the file path
       String semesterName="Semester"+selectedSemester!;
-      Reference reference = FirebaseStorage.instance.ref().child('pdf/$semesterName/$selectedSubject/$fileName');
+      Reference reference = FirebaseStorage.instance.ref().child('pdf/$semesterName/$selectedSubject/$docType/$fileName');
       UploadTask uploadTask = reference.putFile(selectedFile!);
 
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
@@ -46,7 +50,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
       print('File uploaded to Firebase Storage. Download URL: $downloadURL');
 
       // Now you have the download URL, you can save it to Firebase Firestore
-      FirebaseFirestore.instance.collection(selectedSubject!).doc(documentName).set({
+      FirebaseFirestore.instance.collection('Subjects').doc(selectedSubject!).collection(docType).doc(documentName).set({
         'itemName': documentName, // Replace 'Document Name' with the actual document name entered by the user
         'link': downloadURL,
       });

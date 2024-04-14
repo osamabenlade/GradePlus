@@ -184,7 +184,7 @@
 
 import 'package:flutter/material.dart';
 import '../contents/MaterialsContent.dart';
-import '../contents/PYQsContent.dart';
+
 import '../contents/VideoLinksContent.dart';
 
 class SubjectScreen extends StatelessWidget {
@@ -225,8 +225,8 @@ class SubjectScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            MaterialsContent(subjectData['subjectCode']),
-            PYQsContent(),
+            MaterialsContent(subjectData['subjectCode'],'materials'),
+            MaterialsContent(subjectData['subjectCode'],'pyq'),
             VideoLinksContent(),
           ],
         ),

@@ -21,13 +21,13 @@ class ModeratorScreen extends StatefulWidget {
 class _ModeratorScreenState extends State<ModeratorScreen> {
   String? selectedSemester;
   String? selectedSubject;
-  void _addDocument(BuildContext context) {
+  void _addDocument(BuildContext context,String doctype) {
     // Implement logic to add document
     // For example, you can navigate to another screen for adding a document
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddDocumentScreen(),
+        builder: (context) =>  AddDocumentScreen(fileType: doctype,),
       ),
     );
   }
@@ -74,9 +74,25 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
             ElevatedButton(
               onPressed: () {
                 // Implement logic to add document
-                _addDocument(context);
+                _addDocument(context,"materials");
               },
               child: Text('Add Document'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Implement logic to add document
+                _addDocument(context,"pyq");
+              },
+              child: Text('Add Pyqs'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Implement logic to add document
+
+              },
+              child: Text('Add Links'),
             ),
           ],
         ),
