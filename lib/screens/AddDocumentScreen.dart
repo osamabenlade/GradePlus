@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class AddDocumentScreen extends StatefulWidget {
+  final String fileType;
+
+  const AddDocumentScreen({required this.fileType});
   @override
   _AddDocumentScreenState createState() => _AddDocumentScreenState();
 }
@@ -41,16 +44,17 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     });
 
     try {
+      String docType = widget.fileType;
       String fileName = selectedFile!.path.split('/').last;
       String semesterName = "Semester" + selectedSemester!;
-      Reference reference = FirebaseStorage.instance.ref().child('pdf/$semesterName/$selectedSubject/$fileName');
+      Reference reference = FirebaseStorage.instance.ref().child('pdf/$semesterName/$selectedSubject/$docType/$fileName');
       UploadTask uploadTask = reference.putFile(selectedFile!);
 
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
 
       // Upload document details to Firestore
-      await FirebaseFirestore.instance.collection(selectedSubject!).doc(documentName).set({
+      FirebaseFirestore.instance.collection('Subjects').doc(selectedSubject!).collection(docType).doc(documentName).set({
         'itemName': documentName,
         'link': downloadURL,
       });
