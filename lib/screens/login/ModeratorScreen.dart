@@ -20,13 +20,13 @@ class ModeratorScreen extends StatefulWidget {
 class _ModeratorScreenState extends State<ModeratorScreen> {
   String? selectedSemester;
   String? selectedSubject;
-  void _addDocument(BuildContext context) {
+  void _addDocument(BuildContext context,String doctype) {
     // Implement logic to add document
     // For example, you can navigate to another screen for adding a document
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddDocumentScreen(),
+        builder: (context) =>  AddDocumentScreen(fileType: doctype,),
       ),
     );
   }
@@ -84,7 +84,7 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
                   ElevatedButton(
                     onPressed: () {
                       // Implement logic to add document
-                      _addDocument(context);
+                      _addDocument(context,'materials');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -99,6 +99,52 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
                       ),
                       child: Text(
                         'Add Document',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Implement logic to add document
+                      _addDocument(context,'pyq');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 12.0,
+                      ),
+                      child: Text(
+                        'Add Pyqs',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Implement logic to add document
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 12.0,
+                      ),
+                      child: Text(
+                        'Add Links',
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),

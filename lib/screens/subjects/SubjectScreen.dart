@@ -41,8 +41,8 @@ class SubjectScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            MaterialsContent(subjectData['subjectCode']),
-            PYQsContent(subjectData['subjectCode']),
+            MaterialsContent(subjectData['subjectCode'],'materials'),
+            MaterialsContent(subjectData['subjectCode'],'pyq'),
             VideoLinksContent(subjectData['subjectCode']),
           ],
         ),
