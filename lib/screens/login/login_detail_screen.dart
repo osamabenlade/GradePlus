@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradeplus/constants.dart';
 import 'package:gradeplus/homescreen.dart';
+import 'package:gradeplus/screens/login/record/SecureStorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/custom_dropdown.dart';
 
@@ -33,6 +35,9 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
   void initState() {
     super.initState();
   }
+
+
+
   String? _selectedBranch;
   int? _selectedSemester;
   int? _selectedBatch;
@@ -125,7 +130,11 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          SecureStorage secureStorage = SecureStorage();
+                          await secureStorage.writeSecureData('branch', branch);
+                          await secureStorage.writeSecureData('batch', batch.toString());
+                          await secureStorage.writeSecureData('semester', semester.toString());
                         Navigator.push(
                         context,
                         MaterialPageRoute(

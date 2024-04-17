@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradeplus/screens/ShowModeratorsScreen.dart';
@@ -6,13 +7,13 @@ import 'package:gradeplus/screens/addModerator.dart';
 import '../firebase_services.dart';
 
 class AdminScreen extends StatelessWidget {
-  final String name;
-  final String email;
 
-  const AdminScreen({Key? key, required this.name, required this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String name = user?.displayName ?? '';
+    String email = user?.email ?? '';
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Screen'),
@@ -21,7 +22,8 @@ class AdminScreen extends StatelessWidget {
             icon: Icon(Icons.logout),
             onPressed: () {
               FirebaseServices().googleSignOut();
-              Navigator.pop(context); // Go back to the previous screen after signing out
+              Navigator.pushReplacementNamed(context, '/login');
+              // Go back to the previous screen after signing out
             },
           ),
         ],
