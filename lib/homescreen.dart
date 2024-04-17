@@ -43,7 +43,13 @@ class SubjectListScreen extends StatelessWidget {
             icon: Icon(Icons.logout),
             onPressed: () {
               FirebaseServices().googleSignOut();
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
               // Go back to the previous screen after signing out
             },
           ),
