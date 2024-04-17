@@ -57,7 +57,7 @@ class SubjectListScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection(getSemesterName(semester)).snapshots(),
+        stream: FirebaseFirestore.instance.collection(getSemesterName(semester)).doc(branch).collection('sub').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(
