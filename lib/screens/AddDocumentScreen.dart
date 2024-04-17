@@ -17,11 +17,13 @@ class AddDocumentScreen extends StatefulWidget {
 class _AddDocumentScreenState extends State<AddDocumentScreen> {
   String? selectedSemester;
   String? selectedSubject;
+  String? selectedBranch;
   File? selectedFile;
   String? documentName;
   bool _uploading = false;
 
   List<String> semesters = ['1', '2', '3','4','5','6','7','8']; // Example semesters
+  List<String> branch = ['IT', 'ITBI', 'ECE'];
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -52,7 +54,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
 
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
-
+      print("link check $downloadURL");
       // Upload document details to Firestore
       FirebaseFirestore.instance.collection('Subjects').doc(selectedSubject!).collection(docType).doc(documentName).set({
         'itemName': documentName,
@@ -65,6 +67,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
         selectedSubject = null;
         selectedFile = null;
         documentName = '';
+        selectedBranch=null;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -98,7 +101,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedSemester = newValue;
-                      selectedSubject = null; // Reset selected subject when changing semester
+                      selectedBranch = null; // Reset
                     });
                   },
                   items: semesters.map((semester) {
@@ -112,11 +115,32 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
+                SizedBox(height: 20,),
+                selectedSemester != null ?
+                DropdownButtonFormField<String>(
+                  value: selectedBranch,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedBranch = newValue;
+                      selectedSubject = null; // Reset selected subject when changing semester
+                    });
+                  },
+                  items: branch.map((branch) {
+                    return DropdownMenuItem<String>(
+                      value: branch,
+                      child: Text(branch),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    labelText: 'Select Branch',
+                    border: OutlineInputBorder(),
+                  ),
+                ): Container(),
                 SizedBox(height: 20),
-                selectedSemester != null
+                selectedBranch != null
                     ? StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection("Semester" + selectedSemester!)
+                      .collection("Semester" + selectedSemester!).doc(selectedBranch).collection('sub')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
