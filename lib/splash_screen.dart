@@ -2,18 +2,8 @@
 
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:gradeplus/homescreen.dart';
-import 'package:gradeplus/screens/adminscreen.dart';
-import 'package:gradeplus/screens/login/ModeratorScreen.dart';
-import 'package:gradeplus/screens/login/login_detail_screen.dart';
-import 'package:gradeplus/screens/login/login_screen.dart';
-import 'package:gradeplus/screens/login/record/SecureStorage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 import 'onboarding.dart';
@@ -27,70 +17,22 @@ class SplashScreen extends StatefulWidget{
 
 class _SplashScreenState extends State<SplashScreen> {
 
-
   @override
   void initState() {
     super.initState();
 
     Timer(const Duration(milliseconds: 2600), () {
-      checkLoginState(context);
-    });
-
-  }
-  Future<void> checkLoginState(BuildContext context) async {
-    String branch = 'IT';
-    int batch = 2023;
-    int semester = 1;
-    SecureStorage secureStorage = SecureStorage(); // Get the instance of SecureStorage
-    bool loggedIn = await isLoggedInCheck();
-    bool FirstTime = await isFirstTimeCheck();
-    bool isAdmin = await isAdminCheck();
-    bool isMod = await isModeratorCheck();
-
-    if (loggedIn) {
-      branch = await secureStorage.readSecureData('branch');
-      String sem = (await secureStorage.readSecureData('semester'));
-      String bat = (await secureStorage.readSecureData('batch'));
-      if (sem != null) {
-        semester = int.tryParse(sem) ?? 0;
-      }
-
-      if (bat != null) {
-        batch = int.tryParse(bat) ?? 0;
-      }
-    }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          if (!loggedIn) {
-            return LoginScreen();
-          } else {
-            if (!FirstTime) {
-              return OnboardingScreen();
-            } else {
-              if (isAdmin) {
-                return AdminScreen();
-              } else if (isMod) {
-                // Navigate to ModeratorScreen if user is a moderator
-                return ModeratorScreen();
-              } else {
-                return SubjectListScreen(
-                  semester: semester,
-                  batch: batch,
-                  branch: branch,
-                );
-              }
-            }
-          }
-        },
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+          builder: (context) => OnboardingScreen(),
       ),
-    );
+      );
+    });
   }
 
 
-
-    @override
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -126,24 +68,3 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
 }
-Future<bool> isLoggedInCheck() async {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user = _auth.currentUser;
-    return(user != null);
-}
-Future<bool> isFirstTimeCheck() async {
-  final storage = FlutterSecureStorage();
-  String? value = await storage.read(key: 'isFirstTime');
-  return value == 'true';
-}
-Future<bool> isAdminCheck() async {
-  final storage = FlutterSecureStorage();
-  String? value = await storage.read(key: 'isAdmin');
-  return value == 'true';
-}
-Future<bool> isModeratorCheck() async {
-  final storage = FlutterSecureStorage();
-  String? value = await storage.read(key: 'isModerator');
-  return value == 'true';
-}
-
