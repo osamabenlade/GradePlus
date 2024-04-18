@@ -7,10 +7,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradeplus/screens/adminscreen.dart';
 import 'package:gradeplus/screens/login/ModeratorScreen.dart';
 import 'package:gradeplus/screens/login/login_detail_screen.dart';
+import 'package:gradeplus/screens/login/record/SecureStorage.dart';
 
 class FirebaseServices {
   final _auth = FirebaseAuth.instance;
@@ -30,19 +32,20 @@ class FirebaseServices {
         // Sign in to Firebase with the Google credential
         final UserCredential userCredential = await _auth.signInWithCredential(authCredential);
 
-        // Access the user information
         final User? user = userCredential.user;
-
-        // Get the email and name from the user information
+        //
+        // // Get the email and name from the user information
         final String? email = user?.email;
         final String? name = user?.displayName;
-
-        // Use the email and name as needed
-        print('Email: $email');
-        print('Name: $name');
+        //
+        // // Use the email and name as needed
+        // print('Email: $email');
+        // print('Name: $name');
         List<String>? parts = email?.split('@');
         String? emailWithoutDomain = parts?.first;
-        print('Email: $emailWithoutDomain');
+        // print('Email: $emailWithoutDomain');
+        SecureStorage secureStorage = SecureStorage();
+        await secureStorage.writeSecureData('isFirstTime', 'true');
 
 
         final ref = FirebaseDatabase.instance.ref();
@@ -63,9 +66,11 @@ class FirebaseServices {
             bool uidExists = stringData.containsKey(emailWithoutDomain);
 
             if (uidExists) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>
-                      AdminScreen(name: name!, email: emailWithoutDomain!)));
+              SecureStorage secureStorage = SecureStorage();
+              await secureStorage.writeSecureData('isAdmin', 'true');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => AdminScreen()),
+              );
               print('UID exists in the database');
             } else {
               final snapshot = await ref.child('moderators').get();
@@ -79,18 +84,19 @@ class FirebaseServices {
                   bool uidExists = stringData.containsKey(emailWithoutDomain);
                   if (uidExists) {
                     //moderators
+                    SecureStorage secureStorage = SecureStorage();
+                    await secureStorage.writeSecureData('isModerator', 'true');
                     String mod_name = userData[emailWithoutDomain]['name'];
                     String mod_uid = userData[emailWithoutDomain]['id'];
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) =>
-                            ModeratorScreen(
-                                name: mod_name, uid: mod_uid, email: email!)));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => ModeratorScreen()),
+                    );
                   }
                   else {
                     //noraml user
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginDetailScreen()));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginDetailScreen()),
+                    );
                   }
                 }
               }
@@ -129,6 +135,13 @@ class FirebaseServices {
   }
 
   googleSignOut() async {
+    final storage = new FlutterSecureStorage();
+    await storage.delete(key: 'isLoggedIn');
+    await storage.delete(key: 'branch');
+    await storage.delete(key: 'batch');
+    await storage.delete(key: 'semester');
+    await storage.delete(key: 'isAdmin');
+    await storage.delete(key: 'isModerator');
     await _auth.signOut();
     await _googleSignIn.signOut();
   }
