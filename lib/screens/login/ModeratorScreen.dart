@@ -1,17 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../firebase_services.dart';
 import '../AddDocumentScreen.dart';
 
 class ModeratorScreen extends StatefulWidget {
-  final String name;
-  final String uid;
-  final String email;
 
-  ModeratorScreen({
-    required this.name,
-    required this.uid,
-    required this.email,
-  });
 
   @override
   _ModeratorScreenState createState() => _ModeratorScreenState();
@@ -33,6 +26,9 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String name = user?.displayName ?? '';
+    String email = user?.email ?? '';
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -46,7 +42,7 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
             icon: Icon(Icons.logout),
             onPressed: () {
               FirebaseServices().googleSignOut();
-              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
@@ -67,17 +63,17 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Name: ${widget.name}', // Accessing name from widget
+                    'Name: ${name}', // Accessing name from widget
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'UID: ${widget.uid}', // Accessing uid from widget
+                    'UID: ${name}', // Accessing uid from widget
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Email: ${widget.email}', // Accessing email from widget
+                    'Email: ${email}', // Accessing email from widget
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 40),

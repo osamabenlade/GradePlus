@@ -78,13 +78,7 @@ class _SubjectListScreenState extends State<SubjectListScreen>
             icon: Icon(Icons.logout),
             onPressed: () {
               FirebaseServices().googleSignOut();
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],

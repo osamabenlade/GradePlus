@@ -30,7 +30,6 @@ class _ShowModeratorsState extends State<ShowModerators> {
             _moderatorsList.add({
               'id': value['id'],
               'name': value['name'],
-              'email': key,
             });
           });
         });
@@ -53,11 +52,10 @@ class _ShowModeratorsState extends State<ShowModerators> {
           final moderator = _moderatorsList[index];
           return ListTile(
             title: Text(moderator['name']),
-            subtitle: Text(moderator['email']),
+            subtitle: Text(moderator['id']),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(moderator['id']),
                 IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () {
