@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../components/pdfViewer.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoLinksContent extends StatelessWidget {
   final String subjectData;
@@ -45,7 +46,6 @@ class VideoLinksContent extends StatelessWidget {
                 return SizedBox();
               }
 
-
               String itemName = data['itemName'];
               String itemLink = data['link'];
 
@@ -62,14 +62,39 @@ class VideoLinksContent extends StatelessWidget {
                     trailing: IconButton(
                       icon: Icon(Icons.open_in_new),
                       onPressed: () {
-                        print(itemLink);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PdfViewer(itemLink, itemName),
-                          ),
-                        );
+                        if (itemLink != null) {
+                          String? videoId = YoutubePlayer.convertUrlToId(itemLink);
+                          if (videoId != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => YoutubePlayer(
+                                  controller: YoutubePlayerController(
+                                    initialVideoId: videoId,
+                                    flags: YoutubePlayerFlags(
+                                      autoPlay: true,
+                                      mute: false,
+                                    ),
+                                  ),
+                                  showVideoProgressIndicator: true,
+                                  progressIndicatorColor: Colors.blueAccent,
+                                  progressColors: ProgressBarColors(
+                                    playedColor: Colors.blue,
+                                    handleColor: Colors.blueAccent,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          else {
+                            print('Invalid YouTube URL');
+                          }
+                        }
+                        else {
+                          print('YouTube URL is null');
+                        }
                       },
+
                     ),
                   ),
                 ),
@@ -81,3 +106,7 @@ class VideoLinksContent extends StatelessWidget {
     );
   }
 }
+
+
+
+

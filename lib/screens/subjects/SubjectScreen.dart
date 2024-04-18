@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import '../components/ChatScreen.dart';
 import '../contents/MaterialsContent.dart';
 import '../contents/PYQsContent.dart';
 import '../contents/VideoLinksContent.dart';
 
 class SubjectScreen extends StatelessWidget {
   final Map<dynamic, dynamic> subjectData;
+  final String semester;
 
-  SubjectScreen(this.subjectData);
+  SubjectScreen(this.subjectData, this.semester);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,19 @@ class SubjectScreen extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.blue[700],
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.chat),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(getChatroom(subjectData['subjectCode'], semester)),
+                  ),
+                );
+              },
+            ),
+          ],
           iconTheme: IconThemeData(color: Colors.white),
           bottom: TabBar(
             indicatorColor: Colors.white,
@@ -86,4 +101,8 @@ class SubjectScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+String getChatroom(String code, String sem) {
+  return '$code$sem';
 }

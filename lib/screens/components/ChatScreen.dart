@@ -1,20 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ChatScreen extends StatefulWidget {
+  final String id;
+
+  ChatScreen(this.id);
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late String _id;
   final TextEditingController _textEditingController = TextEditingController();
-  final DatabaseReference _database = FirebaseDatabase.instance.reference().child('chat');
+  final DatabaseReference _database = FirebaseDatabase.instance.reference();
   List<Map<String, dynamic>> _messages = [];
   late User _currentUser;
   bool _showEmojiPicker = false;
@@ -22,8 +27,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    _id = widget.id;
     _getCurrentUser();
-    _database.onChildAdded.listen((event) {
+    _database.child(getChatroomID(_id)).onChildAdded.listen((event) {
       setState(() {
         _messages.add(Map<String, dynamic>.from(event.snapshot.value as Map));
       });
@@ -44,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
         'sender': _currentUser.displayName ?? 'Unknown User',
         'senderPhotoUrl': _currentUser.photoURL ?? '',
       };
-      _database.push().set(message);
+      _database.child(getChatroomID(_id)).push().set(message);
       _textEditingController.clear();
     }
   }
@@ -69,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
         'sender': _currentUser.displayName ?? 'Unknown User',
         'senderPhotoUrl': _currentUser.photoURL ?? '',
       };
-      _database.push().set(message);
+      _database.child(getChatroomID(_id)).push().set(message);
     }
   }
 
@@ -88,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
         margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: _getBubbleColor(index), // Use alternate color
+          color: _getBubbleColor(index),
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Column(
@@ -97,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(message['senderPhotoUrl'] ?? ''), // Display profile picture
+                  backgroundImage: NetworkImage(message['senderPhotoUrl'] ?? ''),
                 ),
                 SizedBox(width: 8.0),
                 Text(
@@ -147,9 +153,10 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
+              child: PhotoView(
+                imageProvider: NetworkImage(imageUrl),
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered,
               ),
             ),
           ),
@@ -180,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey), // Add border to text field
+              border: Border.all(color: Colors.grey),
             ),
             child: Row(
               children: [
@@ -228,4 +235,8 @@ class _ChatScreenState extends State<ChatScreen> {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
     return '${dateTime.hour}:${dateTime.minute}';
   }
+}
+
+String getChatroomID(String id) {
+  return 'chat$id';
 }
