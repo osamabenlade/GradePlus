@@ -4,14 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gradeplus/screens/login/login_screen.dart';
 import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'constants.dart';
 import 'firebase_services.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:gradeplus/screens/components/sidenav/downloadscreen.dart';
+import 'package:gradeplus/screens/components/sidenav/announcements.dart';
+import 'package:gradeplus/screens/components/sidenav/aboutus.dart';
+
+
 
 class SubjectListScreen extends StatefulWidget {
   final int semester;
   final int batch;
   final String branch;
+  User? user = FirebaseAuth.instance.currentUser;
 
   SubjectListScreen({
     required this.semester,
@@ -30,6 +37,17 @@ class _SubjectListScreenState extends State<SubjectListScreen>
   late String _branch;
   late ScrollController _scrollController;
   late AnimationController _hideFabAnimController;
+
+  Color _iconColor = Colors.grey[700] ?? Colors.grey; // Initial icon color
+  Color _textColor = Colors.grey[700] ?? Colors.grey; // Initial text color
+
+  String _selectedItem = ''; // Track the currently selected item
+
+
+  // Variables to store user information
+  String? _userName;
+  String? _userEmail;
+  String? _userProfileImageUrl;
 
   @override
   void initState() {
@@ -55,6 +73,9 @@ class _SubjectListScreenState extends State<SubjectListScreen>
           break;
       }
     });
+
+    // Fetch user information when the screen initializes
+    fetchUserInfo();
   }
 
   @override
@@ -62,6 +83,29 @@ class _SubjectListScreenState extends State<SubjectListScreen>
     _scrollController.dispose();
     _hideFabAnimController.dispose();
     super.dispose();
+  }
+
+  // Function to fetch user information
+  void fetchUserInfo() async {
+    // Get the current user from FirebaseAuth
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Set user name
+      setState(() {
+        _userName = user.displayName;
+      });
+
+      // Set user email
+      setState(() {
+        _userEmail = user.email;
+      });
+
+      // Set user profile image URL
+      setState(() {
+        _userProfileImageUrl = user.photoURL;
+      });
+    }
   }
 
   @override
@@ -217,6 +261,115 @@ class _SubjectListScreenState extends State<SubjectListScreen>
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 210,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue[700],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Display user's profile image
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(_userProfileImageUrl ?? ''),
+                    ),
+                    SizedBox(height: 10),
+                    // Display user's name
+                    Text(
+                      _userName ?? 'User Name',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // Display user's email
+                    Text(
+                      _userEmail ?? 'user@gmail.com',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            ListTile(
+              leading: Icon(Icons.home, color: _selectedItem == 'Home' ? Colors.blue : Colors.grey[700]),
+              title: Text(
+                'Home',
+                style: TextStyle(color: _selectedItem == 'Home' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedItem = 'Home';
+                });
+                // Navigate to home screen
+                Navigator.pop(context); // Close the drawer
+                // Replace the current screen with the home screen
+                Navigator.pushReplacementNamed(context, '/home');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.file_download, color: _selectedItem == 'Downloads' ? Colors.blue : Colors.grey[700]),
+              title: Text(
+                'Downloads',
+                style: TextStyle(color: _selectedItem == 'Downloads' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedItem = 'Downloads';
+                });
+                // Navigate to downloads screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DownloadsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.announcement, color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700]),
+              title: Text(
+                'Announcements',
+                style: TextStyle(color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedItem = 'Announcements';
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Announcements()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info, color: _selectedItem == 'About' ? Colors.blue : Colors.grey[700]),
+              title: Text(
+                'About',
+                style: TextStyle(color: _selectedItem == 'About' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  _selectedItem = 'About';
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Aboutus()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

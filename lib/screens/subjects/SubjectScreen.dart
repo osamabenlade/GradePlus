@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/ChatScreen.dart';
 import '../contents/MaterialsContent.dart';
-import '../contents/PYQsContent.dart';
 import '../contents/VideoLinksContent.dart';
 
 class SubjectScreen extends StatelessWidget {
