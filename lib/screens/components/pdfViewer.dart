@@ -16,6 +16,7 @@ class _PdfViewerState extends State<PdfViewer> {
   late bool _isLoading;
   late String _pdfUrl;
   late String _pdfName;
+  bool _isRotated = false;
 
   @override
   void initState() {
@@ -43,6 +44,24 @@ class _PdfViewerState extends State<PdfViewer> {
     }
   }
 
+  void _toggleRotation() {
+    setState(() {
+      _isRotated = !_isRotated;
+    });
+
+    if (_isRotated) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,15 +69,8 @@ class _PdfViewerState extends State<PdfViewer> {
         title: Text(_pdfName),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.screen_rotation),
-            onPressed: () {
-              // Rotate the screen
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight,
-              ]);
-            },
+            icon: Icon(_isRotated ? Icons.screen_lock_rotation : Icons.screen_rotation),
+            onPressed: _toggleRotation,
           ),
         ],
       ),
