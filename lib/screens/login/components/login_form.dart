@@ -5,7 +5,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gradeplus/screens/login/login_detail_screen.dart';
+
 
 import '../../../constants.dart';
 import '../../../firebase_services.dart';

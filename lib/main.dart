@@ -1,11 +1,10 @@
 
+import 'package:GradePlus/screens/login/login_screen.dart';
+import 'package:GradePlus/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gradeplus/screens/login/login_detail_screen.dart';
-import 'package:gradeplus/screens/login/login_screen.dart';
-import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
-import 'package:gradeplus/splash_screen.dart';
+
 
 import 'firebase_options.dart';
 import 'homescreen.dart';
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/splash': (context) => SplashScreen(), // Define your splash screen route
         '/login': (context) => LoginScreen(), // Define your login screen route
-        // Other routes...
+
       },
     );
   }

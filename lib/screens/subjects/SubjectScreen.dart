@@ -3,11 +3,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:gradeplus/screens/login/login_detail_screen.dart';
+
 import '../components/ChatScreen.dart';
 import '../contents/MaterialsContent.dart';
 import '../contents/VideoLinksContent.dart';
 import 'dart:io';
+
+import '../login/login_detail_screen.dart';
 
 class SubjectScreen extends StatefulWidget {
   final Map<dynamic, dynamic> subjectData;
