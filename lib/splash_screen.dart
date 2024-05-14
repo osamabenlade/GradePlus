@@ -2,14 +2,15 @@
 
 import 'dart:async';
 
+import 'package:GradePlus/screens/adminscreen.dart';
+import 'package:GradePlus/screens/login/ModeratorScreen.dart';
+import 'package:GradePlus/screens/login/login_screen.dart';
+import 'package:GradePlus/screens/login/record/SecureStorage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:gradeplus/screens/adminscreen.dart';
-import 'package:gradeplus/screens/login/ModeratorScreen.dart';
-import 'package:gradeplus/screens/login/login_screen.dart';
-import 'package:gradeplus/screens/login/record/SecureStorage.dart';
+
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 import 'homescreen.dart';

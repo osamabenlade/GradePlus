@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:GradePlus/screens/login/record/SecureStorage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gradeplus/constants.dart';
-import 'package:gradeplus/homescreen.dart';
-import 'package:gradeplus/screens/login/record/SecureStorage.dart';
 
+
+import '../../constants.dart';
+import '../../homescreen.dart';
 import 'components/custom_dropdown.dart';
 
 List<Color> _colors = [kPrimaryColor, kPrimaryLightColor];

@@ -1,16 +1,17 @@
+import 'package:GradePlus/screens/components/sidenav/aboutus.dart';
+import 'package:GradePlus/screens/components/sidenav/announcements.dart';
+import 'package:GradePlus/screens/components/sidenav/downloadscreen.dart';
+import 'package:GradePlus/screens/subjects/SubjectScreen.dart';
 import 'package:circle_list/circle_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
-import 'package:gradeplus/screens/login/login_screen.dart';
-import 'package:gradeplus/screens/subjects/SubjectScreen.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'constants.dart';
 import 'firebase_services.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:gradeplus/screens/components/sidenav/downloadscreen.dart';
-import 'package:gradeplus/screens/components/sidenav/announcements.dart';
-import 'package:gradeplus/screens/components/sidenav/aboutus.dart';
+
 
 
 
@@ -285,7 +286,7 @@ class _SubjectListScreenState extends State<SubjectListScreen>
                       _userName ?? 'User Name',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -294,7 +295,7 @@ class _SubjectListScreenState extends State<SubjectListScreen>
                       _userEmail ?? 'user@gmail.com',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                   ],

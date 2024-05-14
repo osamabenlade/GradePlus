@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gradeplus/screens/ShowModeratorsScreen.dart';
-import 'package:gradeplus/screens/addModerator.dart';
+
 
 import '../firebase_services.dart';
+import 'ShowModeratorsScreen.dart';
+import 'addModerator.dart';
 
 class AdminScreen extends StatelessWidget {
 
