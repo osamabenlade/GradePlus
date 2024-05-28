@@ -48,10 +48,11 @@ dependencies:
   advance_pdf_viewer: ^2.0.0
   shared_preferences: ^2.2.2
   syncfusion_flutter_pdfviewer: ^24.2.8
-  path_provider: ^2.0.3
+  path_provider: ^2.0.5
   http: ^1.2.1
   url_launcher: ^6.0.12
   dio: ^4.0.0
+  open_file: ^3.3.2
   flutter_local_notifications: ^17.0.0
   firebase_database: ^10.5.0
   firebase_storage: ^11.7.0
@@ -62,13 +63,15 @@ dependencies:
   flutter_secure_storage: ^8.1.0
   youtube_player_flutter: ^8.1.2
   circle_list: ^1.0.2
-  photo_view: ^0.15.0
+  photo_view: ^0.14.0
   iconsax: ^0.0.8
   flutter_speed_dial: ^7.0.0
   font_awesome_flutter: ^9.1.0
   getwidget: ^3.0.3
   permission_handler: ^11.3.1
   flutter_launcher_icons: ^0.13.1
+
+
 
 
 
