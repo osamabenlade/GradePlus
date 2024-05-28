@@ -332,7 +332,7 @@ class _SubjectListScreenState extends State<SubjectListScreen>
                 // Navigate to downloads screen
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DownloadsScreen()),
+                  MaterialPageRoute(builder: (context) => DownloadScreen()),
                 );
               },
             ),

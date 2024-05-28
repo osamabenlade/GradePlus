@@ -1,10 +1,12 @@
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:file_picker/file_picker.dart'; // Import file picker package
 import '../components/pdfViewer.dart';
 
 class MaterialsContent extends StatelessWidget {
@@ -13,52 +15,67 @@ class MaterialsContent extends StatelessWidget {
 
   MaterialsContent(this.subjectData, this.type);
 
-  Future<void> _downloadFile(String url, String fileName, BuildContext context) async {
-    Dio dio = Dio();
-    try {
-      // Request storage permission
-      final permissionStatus = await Permission.storage.request();
-      if (permissionStatus.isGranted) {
-        // Let the user choose a directory
-        String? saveDirectory = await FilePicker.platform.getDirectoryPath();
-        if (saveDirectory != null) {
-          // Append the file name to the directory path
-          String savePath = '$saveDirectory/$fileName';
-          print("URL: $url");
-          print("Save Path: $savePath");
+  Future<void> openFile({required String url, required String fileName}) async {
+    final file = await downloadFile(url, fileName);
+    if (file == null) {
+      print('Error: Unable to download file.');
+      return;
+    }
+    print('Path: ${file.path}');
+    OpenFile.open(file.path);
+  }
 
-          await dio.download(url, savePath);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('File downloaded successfully.'),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('No directory selected.'),
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Storage permission denied.'),
-          ),
-        );
-      }
-    } catch (e) {
-      print("Error fetching directory path: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to fetch directory path: $e'),
+  Future<File?> downloadFile(String url, String fileName) async {
+    final status = await Permission.storage.request();
+    if (!status.isGranted) {
+      print('Storage permission not granted');
+      return null;
+    }
+
+    try {
+      final response = await Dio().get(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          receiveTimeout: 0,
         ),
       );
+
+      return await downloadFileLocally(response, fileName);
+    } catch (e) {
+      print('Error downloading file: $e');
+      return null;
     }
   }
 
+  Future<File?> downloadFileLocally(Response<dynamic> response, String fileName) async {
+    Directory? directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    final fullPath = '${directory?.path}/NewDirectory';
 
+    Directory(fullPath).createSync(recursive: true);
 
+    List<int> intList = [];
+
+    if (response.data != null) {
+      intList = response.data.cast<int>().toList();
+    }
+
+    Uint8List bytes = Uint8List.fromList(intList);
+
+    File file = File('$fullPath/$fileName.pdf');
+
+    try {
+      await file.writeAsBytes(
+          bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+      return file;
+    } catch (err) {
+      print('Error writing file: $err');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +129,8 @@ class MaterialsContent extends StatelessWidget {
                   child: ListTile(
                     leading: IconButton(
                       icon: Icon(Icons.download),
-                      onPressed: () {
-                        _downloadFile(itemLink, itemName, context);
+                      onPressed: () async {
+                        await openFile(url: itemLink, fileName: itemName);
                       },
                     ),
                     title: Text(itemName),
