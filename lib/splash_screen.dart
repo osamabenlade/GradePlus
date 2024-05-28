@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:GradePlus/screens/SubjectListScreen.dart';
 import 'package:GradePlus/screens/adminscreen.dart';
 import 'package:GradePlus/screens/login/ModeratorScreen.dart';
 import 'package:GradePlus/screens/login/login_screen.dart';
@@ -70,10 +71,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 // Navigate to ModeratorScreen if user is a moderator
                 return ModeratorScreen();
               } else {
-                return SubjectListScreen(
-                  semester: semester,
-                  batch: batch,
-                  branch: branch,
+                return HomeScreen(
+                  initialSemester: semester,
+                  initialBatch: batch,
+                  initialBranch: branch,
                 );
               }
             }

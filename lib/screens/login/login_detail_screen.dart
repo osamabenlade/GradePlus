@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../homescreen.dart';
+import '../SubjectListScreen.dart';
 import 'components/custom_dropdown.dart';
 
 List<Color> _colors = [kPrimaryColor, kPrimaryLightColor];
@@ -128,18 +129,17 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
 
-    onTap: () async {
-    SecureStorage secureStorage = SecureStorage();
-    await secureStorage.writeSecureData('branch', branch);
-    await secureStorage.writeSecureData('batch', batch.toString());
-    await secureStorage.writeSecureData('semester', semester.toString());
+                      onTap: () async {
+                        SecureStorage secureStorage = SecureStorage();
+                      await secureStorage.writeSecureData('branch', branch);
+                      await secureStorage.writeSecureData('batch', batch.toString());
+                      await secureStorage.writeSecureData('semester', semester.toString());
                         Navigator.push(
                         context,
                         MaterialPageRoute(
-                        builder: (context) => SubjectListScreen(
-                        semester: semester,
-                        batch: batch,
-                        branch: branch,
+                        builder: (context) => HomeScreen(initialSemester: semester,
+                          initialBatch: batch,
+                           initialBranch: branch,
                         ),
                         ),
                         );
