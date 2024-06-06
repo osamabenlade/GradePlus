@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../components/pdfViewer.dart';
+
+import '../../components/pdfViewer.dart';
+
 
 class PYQsContent extends StatelessWidget {
   final String subjectData;

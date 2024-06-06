@@ -1,9 +1,10 @@
-import 'package:GradePlus/screens/subjects/SubjectScreen.dart';
+
+import 'package:GradePlus/screens/user_section/subjects/SubjectScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:circle_list/circle_list.dart';
 import 'package:flutter/rendering.dart';
-import '../constants.dart';
+import '../../constants/constants.dart';
 
 class SubjectListScreen extends StatefulWidget {
   final int semester;

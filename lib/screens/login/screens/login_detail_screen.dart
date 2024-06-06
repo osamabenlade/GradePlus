@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-import '../../constants.dart';
-import '../../homescreen.dart';
-import '../SubjectListScreen.dart';
-import 'components/custom_dropdown.dart';
+import '../../../constants/constants.dart';
+import '../../user_section/homescreen.dart';
+import '../../user_section/SubjectListScreen.dart';
+import '../components/custom_dropdown.dart';
 
 List<Color> _colors = [kPrimaryColor, kPrimaryLightColor];
 List<double> _stops = [0.0, 1.8];
@@ -134,26 +134,15 @@ class _LoginDetailScreenGetterState extends State<LoginDetailScreen> {
                       await secureStorage.writeSecureData('branch', branch);
                       await secureStorage.writeSecureData('batch', batch.toString());
                       await secureStorage.writeSecureData('semester', semester.toString());
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                        builder: (context) => HomeScreen(initialSemester: semester,
-                          initialBatch: batch,
-                           initialBranch: branch,
-                        ),
-                        ),
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) =>
+                              HomeScreen(
+                                initialSemester: semester,
+                                initialBatch: batch,
+                                initialBranch: branch,
+                              )),
+                              (Route<dynamic> route) => false,
                         );
-                        /*Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SignIn(
-                                  college: college,
-                                  batch: batch,
-                                  branch: branch,
-                                  semester: semester);
-                            },
-                          ),
-                        );*/
                       },
                       child: Padding(
                         padding: EdgeInsets.all(36.0),

@@ -1,14 +1,20 @@
 
-import 'package:GradePlus/screens/components/sidenav/aboutus.dart';
-import 'package:GradePlus/screens/login/login_screen.dart';
+import 'package:GradePlus/screens/login/record/firebase_services.dart';
+import 'package:GradePlus/screens/admin_section/adminscreen.dart';
+
+import 'package:GradePlus/screens/moderator_section/ModeratorScreen.dart';
+import 'package:GradePlus/screens/login/screens/login_detail_screen.dart';
+import 'package:GradePlus/screens/login/screens/login_screen.dart';
+import 'package:GradePlus/screens/user_section/components/sidenav/aboutus.dart';
 import 'package:GradePlus/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-import 'firebase_options.dart';
-import 'homescreen.dart';
+import 'screens/login/record/firebase_options.dart';
+import 'screens/user_section/homescreen.dart';
+import 'onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,8 +45,14 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => SplashScreen(), // Define your splash screen route
         '/login': (context) => LoginScreen(),
         '/aboutUs':(context)=> Aboutus(),
-
-
+        '/onboarding': (context) => OnboardingScreen(),
+        '/adminScreen': (context) => AdminScreen(),
+        '/moderatorScreen': (context) => ModeratorScreen(),
+        '/homeScreen': (context) => HomeScreen(
+          initialSemester: semester,
+          initialBatch: batch,
+          initialBranch: branch,
+        ),
       },
     );
   }

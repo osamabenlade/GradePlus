@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:intl/intl.dart';  // Import the intl package for date formatting
 
 class ChatScreen extends StatefulWidget {
   final String id;
@@ -23,6 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Map<String, dynamic>> _messages = [];
   late User _currentUser;
   bool _showEmojiPicker = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         _messages.add(Map<String, dynamic>.from(event.snapshot.value as Map));
       });
+      _scrollToBottom();
     });
   }
 
@@ -50,7 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
         'sender': _currentUser.displayName ?? 'Unknown User',
         'senderPhotoUrl': _currentUser.photoURL ?? '',
       };
-      _database.child(getChatroomID(_id)).push().set(message);
+      _database.child(getChatroomID(_id)).push().set(message).then((_) {
+        _scrollToBottom();
+      });
       _textEditingController.clear();
     }
   }
@@ -60,27 +65,32 @@ class _ChatScreenState extends State<ChatScreen> {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      // Upload the image to Firebase Storage
       Reference ref = FirebaseStorage.instance.ref().child('chat_images').child(DateTime.now().millisecondsSinceEpoch.toString());
       UploadTask uploadTask = ref.putFile(File(pickedFile.path));
-
-      // Get the download URL of the uploaded image
       TaskSnapshot taskSnapshot = await uploadTask;
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
-      // Save the image message to Firebase Realtime Database
       Map<String, dynamic> message = {
-        'image': downloadUrl, // Save the download URL instead of local path
+        'image': downloadUrl,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'sender': _currentUser.displayName ?? 'Unknown User',
         'senderPhotoUrl': _currentUser.photoURL ?? '',
       };
-      _database.child(getChatroomID(_id)).push().set(message);
+      _database.child(getChatroomID(_id)).push().set(message).then((_) {
+        _scrollToBottom();
+      });
     }
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
+
   Color? _getBubbleColor(int index) {
-    // Alternating between two colors based on the index of the message
     return index % 2 == 0 ? Colors.grey[300] : Colors.blue[300];
   }
 
@@ -175,6 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 var message = _messages[index];
@@ -233,7 +244,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String _formatTimestamp(int timestamp) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return '${dateTime.hour}:${dateTime.minute}';
+    String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);  // Format the date
+    String formattedTime = DateFormat('h:mm a').format(dateTime);  // Format the time
+    return '$formattedDate at $formattedTime';  // Combine date and time
   }
 }
 

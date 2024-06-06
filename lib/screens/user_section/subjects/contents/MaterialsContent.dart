@@ -7,7 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../components/pdfViewer.dart';
+
+import '../../components/pdfViewer.dart';
+
 
 class MaterialsContent extends StatelessWidget {
   final String type;

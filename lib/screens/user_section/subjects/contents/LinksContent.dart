@@ -3,10 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class VideoLinksContent extends StatelessWidget {
+class LinksContent extends StatelessWidget {
   final String subjectData;
 
-  VideoLinksContent(this.subjectData);
+  LinksContent(this.subjectData);
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +56,7 @@ class VideoLinksContent extends StatelessWidget {
 
               String itemName = data['itemName'];
               String itemLink = data['link'];
+              //print("llhh $itemLink");
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -63,35 +72,36 @@ class VideoLinksContent extends StatelessWidget {
                       icon: Icon(Icons.open_in_new),
                       onPressed: () {
                         if (itemLink != null) {
-                          String? videoId = YoutubePlayer.convertUrlToId(itemLink);
-                          if (videoId != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => YoutubePlayer(
-                                  controller: YoutubePlayerController(
-                                    initialVideoId: videoId,
-                                    flags: YoutubePlayerFlags(
-                                      autoPlay: true,
-                                      mute: false,
-                                    ),
-                                  ),
-                                  showVideoProgressIndicator: true,
-                                  progressIndicatorColor: Colors.blueAccent,
-                                  progressColors: ProgressBarColors(
-                                    playedColor: Colors.blue,
-                                    handleColor: Colors.blueAccent,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          else {
-                            print('Invalid YouTube URL');
-                          }
+                          _launchURL(itemLink);
+                          // String? videoId = YoutubePlayer.convertUrlToId(itemLink);
+                          // if (videoId != null) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => YoutubePlayer(
+                          //         controller: YoutubePlayerController(
+                          //           initialVideoId: videoId,
+                          //           flags: YoutubePlayerFlags(
+                          //             autoPlay: true,
+                          //             mute: false,
+                          //           ),
+                          //         ),
+                          //         showVideoProgressIndicator: true,
+                          //         progressIndicatorColor: Colors.blueAccent,
+                          //         progressColors: ProgressBarColors(
+                          //           playedColor: Colors.blue,
+                          //           handleColor: Colors.blueAccent,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
+                          // else {
+                          //   print('Invalid YouTube URL');
+                          // }
                         }
                         else {
-                          print('YouTube URL is null');
+                          print('URL is null');
                         }
                       },
 

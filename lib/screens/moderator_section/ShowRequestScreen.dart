@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../user_section/components/pdfViewer.dart';
 
-import '../components/pdfViewer.dart';
+
 
 class ShowRequestsScreen extends StatefulWidget {
   @override
@@ -38,27 +37,33 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
 
           List<String> subjectNames = snapshot.data!.docs.map((doc) => doc.id).toList();
 
-          return ListView.builder(
-            itemCount: subjectNames.length,
-            itemBuilder: (context, index) {
-              String subjectName = subjectNames[index];
-              print("sub $subjectName");
+          return FutureBuilder<Map<String, List<Widget>>>(
+            future: _fetchAllRequestItems(subjectNames, context),
+            builder: (context, futureSnapshot) {
+              if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-              return FutureBuilder<List<Widget>>(
-                future: _buildRequestItems(subjectName, context),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
+              if (futureSnapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${futureSnapshot.error}'),
+                );
+              }
 
-                  if (snapshot.hasError) {
-                    return Text('Error11: ${snapshot.error}');
-                  }
+              Map<String, List<Widget>> subjectWidgets = futureSnapshot.data!;
+
+              return ListView.builder(
+                itemCount: subjectWidgets.keys.length,
+                itemBuilder: (context, index) {
+                  String subjectName = subjectWidgets.keys.elementAt(index);
+                  List<Widget> requestItems = subjectWidgets[subjectName]!;
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...snapshot.data!,
+                      ...requestItems,
                     ],
                   );
                 },
@@ -68,6 +73,17 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
         },
       ),
     );
+  }
+
+  Future<Map<String, List<Widget>>> _fetchAllRequestItems(List<String> subjectNames, BuildContext context) async {
+    Map<String, List<Widget>> subjectWidgets = {};
+
+    for (String subjectName in subjectNames) {
+      List<Widget> requestItems = await _buildRequestItems(subjectName, context);
+      subjectWidgets[subjectName] = requestItems;
+    }
+
+    return subjectWidgets;
   }
 
   Future<List<Widget>> _buildRequestItems(String subjectName, BuildContext context) async {
@@ -83,27 +99,26 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       String description = data['itemName'];
       String link = data['link'];
-      String fileName=document.id;
+      String fileName = document.id;
 
-      requestItems.add(_buildRequestItem(subjectName, 'materials', description, link, context,fileName));
+      requestItems.add(_buildRequestItem(subjectName, 'materials', description, link, context, fileName));
     }
 
     for (var document in pyqsDocuments) {
       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
       String description = data['itemName'];
       String link = data['link'];
-      String fileName=document.id;
+      String fileName = document.id;
 
-      requestItems.add(_buildRequestItem(subjectName, 'pyq', description, link, context,fileName));
+      requestItems.add(_buildRequestItem(subjectName, 'pyq', description, link, context, fileName));
     }
 
     return requestItems;
   }
 
-  Widget _buildRequestItem(String subjectName, String docType, String description, String link, BuildContext context,String fileName) {
+  Widget _buildRequestItem(String subjectName, String docType, String description, String link, BuildContext context, String fileName) {
     Future<void> deleteItem() async {
       try {
-
         // Delete the document from Firestore
         await FirebaseFirestore.instance
             .collection('Requests')
@@ -117,11 +132,11 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
         // Handle error here
       }
     }
+
     Future<void> _uploadFile() async {
       try {
-        print("link check $link");
         // Upload document details to Firestore
-        FirebaseFirestore.instance.collection('Subjects').doc(subjectName!).collection(docType).doc(fileName).set({
+        FirebaseFirestore.instance.collection('Subjects').doc(subjectName).collection(docType).doc(fileName).set({
           'itemName': fileName,
           'link': link,
         });
@@ -134,6 +149,7 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
         print('Error uploading file: $error');
       }
     }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Card(
@@ -193,18 +209,15 @@ class _ShowRequestsScreenState extends State<ShowRequestsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.check,color: Colors.green,size: 30,),
+                    icon: Icon(Icons.check, color: Colors.green, size: 30),
                     onPressed: () {
-                      // Add your onPressed logic for the tick icon
                       _uploadFile();
-
                     },
                   ),
                   SizedBox(width: 16),
                   IconButton(
-                    icon: Icon(Icons.close,color: Colors.red,size: 30,),
+                    icon: Icon(Icons.close, color: Colors.red, size: 30),
                     onPressed: () {
-                      // Add your onPressed logic for the wrong icon
                       deleteItem();
                     },
                   ),

@@ -5,8 +5,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
-import '../login_detail_screen.dart';
+import '../../../constants/constants.dart';
+import '../screens/login_detail_screen.dart';
 
 List<Color> _colors = [kPrimaryColor, kPrimaryLightColor];
 List<double> _stops = [1.8, 0.0];
