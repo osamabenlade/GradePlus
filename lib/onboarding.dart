@@ -2,10 +2,11 @@
 
 import 'dart:math';
 
-import 'package:GradePlus/screens/login/login_screen.dart';
+import 'package:GradePlus/screens/login/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 
 
@@ -25,7 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       builder: (BuildContext context, Widget? widget) => MaterialApp(
-        title: "Hello",
+        title: "GradePlus",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -58,7 +59,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
           CustomPaint(
             painter: ArcPainter(),
             child: SizedBox(
-              height: screenSize.height / 1.4,
+              height: screenSize.height / 1.3,
               width: screenSize.width,
             ),
           ),
@@ -66,7 +67,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
             top: 50.h,
             right: 5.w,
             left: 5.w,
-            child: Image.asset(
+            child: Lottie.asset(
               tabs[_currentIndex].imgpath,
               key: Key('${Random().nextInt(999999999)}'),
               width: 600.w,
@@ -92,13 +93,30 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
                             SizedBox(height: 30.h),
                             Expanded(
                               child: Center(
-                                child: Text(
-                                  tab.title,
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.cyan,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min, // This will center the column vertically
+                                  children: [
+                                    Text(
+                                      tab.title,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.cyan,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        tab.description,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -129,9 +147,10 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_currentIndex == 2) {
-            Navigator.push(context,
-                // MaterialPageRoute(builder: (context) => HomeScreen()));
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+                  (Route<dynamic> route) => false,
+            );
           } else {
             _pageController.nextPage(
               duration: const Duration(milliseconds: 300),
@@ -204,22 +223,26 @@ class _DotIndicator extends StatelessWidget {
 class OnboardingModel {
   final String imgpath;
   final String title;
+  final String description;
 
 
-  OnboardingModel(this.imgpath , this.title);
+  OnboardingModel(this.imgpath , this.title,this.description);
 }
 
 List<OnboardingModel> tabs = [
   OnboardingModel(
-    'assets/test.png',
-    'page 1.................'
+    'assets/jsons/screen1.json',
+    'Welcome to GradePlus',
+    ' Your ultimate resource for lecture notes, previous year papers, and study materials.'
   ),
   OnboardingModel(
-    'assets/test.png',
-    'page 2..............................'
+      'assets/jsons/screen3.json',
+    'Access and Share Study Materials',
+    'Easily find lecture PDFs, past papers, and video links. Share your own materials with a click'
   ),
   OnboardingModel(
-    'assets/test.png',
-    'write later...........................'
+      'assets/jsons/screen2.json',
+    'Chat and Collaborate',
+    'Join subject-specific chats to discuss and collaborate with batch mates'
   ),
 ];

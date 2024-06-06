@@ -4,9 +4,9 @@
 import 'dart:io';
 
 
-import 'package:GradePlus/screens/adminscreen.dart';
-import 'package:GradePlus/screens/login/ModeratorScreen.dart';
-import 'package:GradePlus/screens/login/login_detail_screen.dart';
+import 'package:GradePlus/screens/admin_section/adminscreen.dart';
+import 'package:GradePlus/screens/moderator_section/ModeratorScreen.dart';
+import 'package:GradePlus/screens/login/screens/login_detail_screen.dart';
 import 'package:GradePlus/screens/login/record/SecureStorage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-
+String mod_name='hima';
+String mod_uid='iit237';
 class FirebaseServices {
   final _auth = FirebaseAuth.instance;
   final _googleSignIn = GoogleSignIn();
@@ -47,7 +48,6 @@ class FirebaseServices {
         // print('Email: $emailWithoutDomain');
         SecureStorage secureStorage = SecureStorage();
         await secureStorage.writeSecureData('isFirstTime', 'true');
-
 
         final ref = FirebaseDatabase.instance.ref();
         final snapshot = await ref.child('admins').get();
@@ -87,10 +87,11 @@ class FirebaseServices {
                     //moderators
                     SecureStorage secureStorage = SecureStorage();
                     await secureStorage.writeSecureData('isModerator', 'true');
-                    String mod_name = userData[emailWithoutDomain]['name'];
-                    String mod_uid = userData[emailWithoutDomain]['id'];
-                    Navigator.of(context).pushReplacement(
+                     mod_name = userData[emailWithoutDomain]['name'];
+                     mod_uid = userData[emailWithoutDomain]['id'];
+                    Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => ModeratorScreen()),
+                          (Route<dynamic> route) => false,
                     );
                   }
                   else {

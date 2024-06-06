@@ -1,14 +1,16 @@
-import 'package:GradePlus/screens/SubjectListScreen.dart';
+import 'package:GradePlus/screens/user_section/SubjectListScreen.dart';
+import 'package:GradePlus/screens/login/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'constants.dart';
-import 'firebase_services.dart';
+import '../../constants/constants.dart';
+import '../login/record/firebase_services.dart';
 import 'package:iconsax/iconsax.dart';
-import 'screens/components/sidenav/aboutus.dart';
-import 'screens/components/sidenav/announcements.dart';
-import 'screens/components/sidenav/downloadscreen.dart';
-import 'screens/subjects/SubjectScreen.dart';
+
+import 'components/sidenav/aboutus.dart';
+import 'components/sidenav/announcements.dart';
+import 'components/sidenav/downloadscreen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   final int initialSemester;
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return DownloadScreen();
       case 'Announcements':
         return Announcements();
-      case 'About':
+      case 'About Us':
         return Aboutus();
       default:
         return Center(child: Text('Error: Unknown screen'));
@@ -92,8 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return 'Downloads';
       case 'Announcements':
         return 'Announcements';
-      case 'About':
+      case 'About Us':
         return 'About Us';
+      case 'Logout':
+        return 'Logout';
       default:
         return getSemester(_semester);
     }
@@ -112,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.logout),
             onPressed: () {
               FirebaseServices().googleSignOut();
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+              );
             },
           ),
         ],
@@ -185,28 +192,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pop(context); // Close the drawer
               },
             ),
+            // ListTile(
+            //   leading: Icon(Icons.announcement, color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700]),
+            //   title: Text(
+            //     'Announcements',
+            //     style: TextStyle(color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+            //   ),
+            //   onTap: () {
+            //     setState(() {
+            //       _selectedItem = 'Announcements';
+            //     });
+            //     Navigator.pop(context); // Close the drawer
+            //   },
+            // ),
             ListTile(
-              leading: Icon(Icons.announcement, color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700]),
+              leading: Icon(Icons.info, color: _selectedItem == 'About Us' ? Colors.blue : Colors.grey[700]),
               title: Text(
-                'Announcements',
-                style: TextStyle(color: _selectedItem == 'Announcements' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
+                'About Us',
+                style: TextStyle(color: _selectedItem == 'About Us' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
               ),
               onTap: () {
                 setState(() {
-                  _selectedItem = 'Announcements';
-                });
-                Navigator.pop(context); // Close the drawer
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.info, color: _selectedItem == 'About' ? Colors.blue : Colors.grey[700]),
-              title: Text(
-                'About',
-                style: TextStyle(color: _selectedItem == 'About' ? Colors.blue : Colors.grey[700], fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  _selectedItem = 'About';
+                  _selectedItem = 'About Us';
                 });
                 Navigator.pop(context); // Close the drawer
               },
